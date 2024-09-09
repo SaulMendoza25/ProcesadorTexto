@@ -1,2 +1,3 @@
-#Programa de texto
+Programa de texto
+==================
 
