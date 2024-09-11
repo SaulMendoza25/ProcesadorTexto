@@ -32,18 +32,20 @@ public class MarcoProcesadorTexto extends JFrame {
 
 	private Image logoMarco() {
 		URL url = null;
-		try {
-			url = new URI(
-					"https://static.wikia.nocookie.net/eswarhammer40k/images/c/c4/Esquema_Primera_Legi%C3%B3n_%C3%81ngeles_Oscuros.png/revision/latest?cb=20150224152846")
-					.toURL();
-		} catch (MalformedURLException e) {
-
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new ImageIcon(url).getImage();
+		String address=null;
+//		try {
+//			url = new URI(
+//					"https://static.wikia.nocookie.net/eswarhammer40k/images/c/c4/Esquema_Primera_Legi%C3%B3n_%C3%81ngeles_Oscuros.png/revision/latest?cb=20150224152846")
+//					.toURL();
+			address = "src/images/cuaderno.png";
+//		} catch (MalformedURLException e) {
+//
+//			e.printStackTrace();
+//		} catch (URISyntaxException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		return new ImageIcon(address).getImage();
 
 	}
 }
