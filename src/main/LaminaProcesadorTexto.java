@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.StyledEditorKit;
 
 public class LaminaProcesadorTexto extends JPanel {
 	
@@ -81,6 +82,9 @@ public class LaminaProcesadorTexto extends JPanel {
 
 		}
 
+	}
+	private class Gestiona_Eventos extends StyledEditorKit{
+		
 	}
 	public void textPaneEnter() {
 

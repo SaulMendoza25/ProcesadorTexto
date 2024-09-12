@@ -3,11 +3,10 @@ package main;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
+//import java.net.MalformedURLException;
+//import java.net.URI;
+//import java.net.URISyntaxException;
+//import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -31,7 +30,7 @@ public class MarcoProcesadorTexto extends JFrame {
 	}
 
 	private Image logoMarco() {
-		URL url = null;
+//		URL url = null;
 		String address=null;
 //		try {
 //			url = new URI(
