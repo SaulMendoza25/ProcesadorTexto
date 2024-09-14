@@ -2,7 +2,6 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.ScrollPane;
-
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -11,7 +10,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.StyledEditorKit;
 
 public class LaminaProcesadorTexto extends JPanel {
 	
@@ -24,12 +22,10 @@ public class LaminaProcesadorTexto extends JPanel {
 		numeroLetra.setBorder(BorderFactory.createEmptyBorder());
 		hojaSur.setLayout(new BorderLayout());
 		hojaSur.add(numeroLetra, BorderLayout.EAST);
-		
 		setLayout(new BorderLayout(0, 0));
 		add(barMenu(), BorderLayout.NORTH);
 		panel.add(hoja);
 		add(panel, BorderLayout.CENTER);
-//		add(hoja, BorderLayout.CENTER);
 		add(hojaSur, BorderLayout.SOUTH);
 		hojaSur.setEditable(false);
 	}
@@ -38,6 +34,10 @@ public class LaminaProcesadorTexto extends JPanel {
 		JMenuBar barMenu = new JMenuBar();
 		JMenu archivo = new JMenu("Archivo");
 		JMenu fuente = new JMenu("Menu");
+		
+		fuente.add(opcionesTeclados.copiar());
+		fuente.add(opcionesTeclados.cortar());
+		fuente.add(opcionesTeclados.pegar());
 		fuente.add(fuentes.getFuente(hojaSur, hoja));
 		fuente.add(fuentes.getEstilo(hojaSur, hoja));
 		fuente.add(fuentes.getSizeF(hojaSur, hoja));
@@ -53,7 +53,8 @@ public class LaminaProcesadorTexto extends JPanel {
 		@Override
 		public void changedUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
-
+            
+            hojaSur.setText("La fuente  "+fuentes.getFuente() + " el estilo  " + fuentes.getEstilos());
 		}
 
 		@Override
@@ -83,12 +84,10 @@ public class LaminaProcesadorTexto extends JPanel {
 		}
 
 	}
-	private class Gestiona_Eventos extends StyledEditorKit{
-		
-	}
 	public void textPaneEnter() {
 
 	}
+	private OpcionesTeclado opcionesTeclados=new OpcionesTeclado();
 	private JTextField numeroLetra = new JTextField();
 	private OpcionFuente fuentes = new OpcionFuente();
 	private OpcionArchivo archivos = new OpcionArchivo();

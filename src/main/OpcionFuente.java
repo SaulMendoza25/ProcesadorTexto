@@ -1,25 +1,49 @@
 package main;
 
-import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Iterator;
 
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.StyledEditorKit;
 
 public class OpcionFuente {
 
+		private  Icon imagenIcon(String imagen) {
+			return new ImageIcon(imagen); 
+		}
 	public JMenu getFuente(JTextField hojaSur, JTextPane hoja) {
+		class FuenteObtener extends StyledEditorKit.FontFamilyAction{
+
+			private static final long serialVersionUID = 4672126712178448083L;
+			public FuenteObtener(String nm, String family) {
+				super(nm, family);
+				
+			}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				fuentes=e.getActionCommand();
+				super.actionPerformed(e);
+				
+			}
+		}
 		JMenu fuente = new JMenu("Fuente");
+		fuente.setIcon(imagenIcon("src/images/diseno_de_fuentes.png"));
 		JMenuItem srf = new JMenuItem("Serif");
 		JMenuItem djs = new JMenuItem("DejaVu Serif");
 		JMenuItem ctl = new JMenuItem("Cantarell");
-		srf.addActionListener(new StyledEditorKit.FontFamilyAction("cambio_styke", srf.getText()));
-		djs.addActionListener(new StyledEditorKit.FontFamilyAction("cambio_styke", djs.getText()));
-		ctl.addActionListener(new StyledEditorKit.FontFamilyAction("cambio_styke", ctl.getText()));
+		srf.addActionListener(new FuenteObtener("cambio_style", srf.getText()));
+		djs.addActionListener(new FuenteObtener("cambio_style", djs.getText()));
+		ctl.addActionListener(new FuenteObtener("cambio_style", ctl.getText()));
 		fuente.add(srf);
 		fuente.add(djs);
 		fuente.add(ctl);
@@ -27,40 +51,78 @@ public class OpcionFuente {
 	}
 
 	public JMenu getEstilo(JTextField hojaSur, JTextPane hoja) {
+
 		JMenu estilo = new JMenu("Estilo");
-		JMenuItem ngt = new JMenuItem("Negrita");
-		JMenuItem crv = new JMenuItem("Cursiva");
-//		JMenuItem ngt_crv = new JMenuItem("Ambos");
-//		JMenuItem quitar = new JMenuItem("Ninguno");
-		ngt.addActionListener(new StyledEditorKit.BoldAction());
-		crv.addActionListener(new StyledEditorKit.ItalicAction());
-//		ngt_crv.addActionListener(new BarraEstilo());
-//		quitar.addActionListener(new BarraEstilo());
+		estilo.setIcon(imagenIcon("src/images/estilo.png"));
+		JCheckBoxMenuItem ngt = new JCheckBoxMenuItem("Negrita",new ImageIcon("src/images/bold.png"));
+		JCheckBoxMenuItem crv = new JCheckBoxMenuItem("Cursiva",new ImageIcon("src/images/italic.png"));
+		ngt.addActionListener(new StyledEditorKit.BoldAction() {
+
+			private static final long serialVersionUID = 1112331812647558540L;
+			int contador=1;
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(contador%2==0) {
+					estilos="Sin negrita";
+					contador++;
+				}else {
+					estilos="Con negrita";
+					contador++;
+				}
+							
+				super.actionPerformed(e);
+			}
+		});
+		crv.addActionListener(new StyledEditorKit.ItalicAction(){
+			private static final long serialVersionUID = -1809338000974026141L;
+			int contador=1;
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(contador%2==0) {
+					estilos="Sin cursiva";
+					contador++;
+				}else {
+					estilos="Con cursiva";
+					contador++;
+				}
+				
+				super.actionPerformed(e);
+			}
+		});
 		estilo.add(ngt);
 		estilo.add(crv);
-		estilo.addSeparator();
-//		estilo.add(ngt_crv);
-//		estilo.add(quitar);
+
 		return estilo;
 	}
 
 	public JMenu getSizeF(JTextField hojaSur, JTextPane hoja) {
 		JMenu size = new JMenu("Tamaño");
-		JMenuItem small = new JMenuItem("12");
-		JMenuItem smallMedium = new JMenuItem("16");
-		JMenuItem medium = new JMenuItem("18");
-		JMenuItem tall = new JMenuItem("20");
-		small.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size",Integer.parseInt(small.getText())));
-		smallMedium.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size",Integer.parseInt(smallMedium.getText())));
-		medium.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size", Integer.parseInt(medium.getText())));
-		tall.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size",Integer.parseInt(tall.getText())));
-		size.add(small);
-		size.add(smallMedium);
-		size.add(medium);
-		size.add(tall);
+		size.setIcon(imagenIcon("src/images/tamano-del-texto.png"));
+		generadorSize(size, 50);
 		return size;
 	}
-
-	public JTextField posicionPane = new JTextField();
-
+	private void generadorSize(JMenu menuSize,int cantidad) {
+		int generador=8;
+		JRadioButtonMenuItem generado;
+		ButtonGroup grupo = new  ButtonGroup();
+//		JRadioButtonMenuItem generador = new JRadioButtonMenuItem("12");
+		for (int i = 4; i <= cantidad/2; i++) {
+			generado =new JRadioButtonMenuItem(String.valueOf(generador));
+			generado.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size",generador));
+			grupo.add(generado);
+			menuSize.add(generado);
+			generador+=2;
+		}
+		
+	}
+	public String getFuente() {
+		return fuentes;
+	}
+	public String getEstilos() {
+		return estilos;
+	}
+    private  String fuentes="Dialog";
+    private String estilos="Ninguno";
+    private int size;
 }
