@@ -1,11 +1,16 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ScrollPane;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
@@ -16,7 +21,8 @@ public class LaminaProcesadorTexto extends JPanel {
 	public LaminaProcesadorTexto() {
 		ScrollPane panel = new ScrollPane();
 		
-		
+		getMenuEmergente();
+		hoja.setBackground(new Color(245, 222, 179));
 		hoja.getDocument().addDocumentListener(new modificiadorPrincipal());
 		numeroLetra.setEditable(false);
 		numeroLetra.setBorder(BorderFactory.createEmptyBorder());
@@ -29,8 +35,18 @@ public class LaminaProcesadorTexto extends JPanel {
 		add(hojaSur, BorderLayout.SOUTH);
 		hojaSur.setEditable(false);
 	}
-
+    private JPopupMenu getMenuEmergente() {
+    	 JPopupMenu MenuEmergente = new JPopupMenu() ;
+    	
+    	MenuEmergente.add(fuentes.getFuente(hojaSur, hoja));
+ 		MenuEmergente.add(fuentes.getEstilo(hojaSur, hoja));
+ 		MenuEmergente.add(fuentes.getSizeF(hojaSur, hoja));
+ 		
+ 		hoja.setComponentPopupMenu(MenuEmergente);
+    	 return MenuEmergente;
+    }
 	private JMenuBar barMenu() {
+		
 		JMenuBar barMenu = new JMenuBar();
 		JMenu archivo = new JMenu("Archivo");
 		JMenu fuente = new JMenu("Menu");
@@ -87,6 +103,7 @@ public class LaminaProcesadorTexto extends JPanel {
 	public void textPaneEnter() {
 
 	}
+	
 	private OpcionesTeclado opcionesTeclados=new OpcionesTeclado();
 	private JTextField numeroLetra = new JTextField();
 	private OpcionFuente fuentes = new OpcionFuente();

@@ -1,8 +1,8 @@
 package main;
 
-import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.text.StyledEditorKit;
 
 public class OpcionFuente {
@@ -55,6 +56,8 @@ public class OpcionFuente {
 		JMenu estilo = new JMenu("Estilo");
 		estilo.setIcon(imagenIcon("src/images/estilo.png"));
 		JCheckBoxMenuItem ngt = new JCheckBoxMenuItem("Negrita",new ImageIcon("src/images/bold.png"));
+		KeyStroke controlNegrita = KeyStroke.getKeyStroke( KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK);
+		KeyStroke controlCursiva = KeyStroke.getKeyStroke( KeyEvent.VK_I,InputEvent.CTRL_DOWN_MASK);
 		JCheckBoxMenuItem crv = new JCheckBoxMenuItem("Cursiva",new ImageIcon("src/images/italic.png"));
 		ngt.addActionListener(new StyledEditorKit.BoldAction() {
 
@@ -73,6 +76,8 @@ public class OpcionFuente {
 				super.actionPerformed(e);
 			}
 		});
+		ngt.setAccelerator(controlNegrita);
+		crv.setAccelerator(controlCursiva);
 		crv.addActionListener(new StyledEditorKit.ItalicAction(){
 			private static final long serialVersionUID = -1809338000974026141L;
 			int contador=1;
