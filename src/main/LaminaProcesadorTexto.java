@@ -3,8 +3,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ScrollPane;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
@@ -13,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToolBar;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -20,7 +20,6 @@ public class LaminaProcesadorTexto extends JPanel {
 	
 	public LaminaProcesadorTexto() {
 		ScrollPane panel = new ScrollPane();
-		
 		getMenuEmergente();
 		hoja.setBackground(new Color(245, 222, 179));
 		hoja.getDocument().addDocumentListener(new modificiadorPrincipal());
@@ -29,7 +28,7 @@ public class LaminaProcesadorTexto extends JPanel {
 		hojaSur.setLayout(new BorderLayout());
 		hojaSur.add(numeroLetra, BorderLayout.EAST);
 		setLayout(new BorderLayout(0, 0));
-		add(barMenu(), BorderLayout.NORTH);
+		add(getLaminaSuperior(), BorderLayout.NORTH);
 		panel.add(hoja);
 		add(panel, BorderLayout.CENTER);
 		add(hojaSur, BorderLayout.SOUTH);
@@ -38,25 +37,37 @@ public class LaminaProcesadorTexto extends JPanel {
     private JPopupMenu getMenuEmergente() {
     	 JPopupMenu MenuEmergente = new JPopupMenu() ;
     	
-    	MenuEmergente.add(fuentes.getFuente(hojaSur, hoja));
+    	MenuEmergente.add(fuentes.getFuente());
  		MenuEmergente.add(fuentes.getEstilo(hojaSur, hoja));
  		MenuEmergente.add(fuentes.getSizeF(hojaSur, hoja));
  		
  		hoja.setComponentPopupMenu(MenuEmergente);
     	 return MenuEmergente;
     }
+    
+    private JPanel getLaminaSuperior() {
+    	JPanel LaminaSuperior = new JPanel();
+    	LaminaSuperior.setLayout(new BorderLayout());
+    	OpcionesTeclado opcionesTeclados=new OpcionesTeclado(hoja);
+    	JToolBar MenuDeHerramienta = new JToolBar();
+    	MenuDeHerramienta.add(opcionesTeclados.copiar());
+    	MenuDeHerramienta.add(opcionesTeclados.cortar());
+    	MenuDeHerramienta.add(opcionesTeclados.pegar());
+    	
+    	LaminaSuperior.add(barMenu(), BorderLayout.NORTH);
+    	LaminaSuperior.add(MenuDeHerramienta,BorderLayout.CENTER);
+    	return LaminaSuperior;
+    }
 	private JMenuBar barMenu() {
+		
 		
 		JMenuBar barMenu = new JMenuBar();
 		JMenu archivo = new JMenu("Archivo");
 		JMenu fuente = new JMenu("Menu");
-		
-		fuente.add(opcionesTeclados.copiar());
-		fuente.add(opcionesTeclados.cortar());
-		fuente.add(opcionesTeclados.pegar());
-		fuente.add(fuentes.getFuente(hojaSur, hoja));
+		fuente.add(fuentes.getFuente());
 		fuente.add(fuentes.getEstilo(hojaSur, hoja));
 		fuente.add(fuentes.getSizeF(hojaSur, hoja));
+		fuente.add(fuentes.getColor(hoja));
 		archivo.add(archivos.getGuardar(hoja));
 		archivo.add(archivos.getGuardarComo(hoja));
 		barMenu.add(archivo);
@@ -70,45 +81,33 @@ public class LaminaProcesadorTexto extends JPanel {
 		public void changedUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
             
-            hojaSur.setText("La fuente  "+fuentes.getFuente() + " el estilo  " + fuentes.getEstilos());
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent arg0) {
-			textPaneEnter();
 			String textoSinEspacios = hoja.getText().replace(" ", "");
-
 			for (int i = 1; i <= textoSinEspacios.length(); i++) {
-				numeroLetra.setText("" + i);
+				numeroLetra.setText("" + (i-happend));
 			}
-
 		}
-
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			textPaneEnter();
 			if (hoja.getText().length() == 0) {
 				numeroLetra.setText("" + 0);
 			} else {
 				String textoSinEspacios = hoja.getText().replace(" ", "");
-				
 				for (int i = 1; i <= textoSinEspacios.length(); i++) {
-					numeroLetra.setText("" + i);
+					numeroLetra.setText("" + (i-happend) );
 				}
 			}
-
 		}
-
 	}
-	public void textPaneEnter() {
+	private static int happend = 0;
 
-	}
-	
-	private OpcionesTeclado opcionesTeclados=new OpcionesTeclado();
+	private OpcionFuente fuentes=new OpcionFuente();
 	private JTextField numeroLetra = new JTextField();
-	private OpcionFuente fuentes = new OpcionFuente();
 	private OpcionArchivo archivos = new OpcionArchivo();
 	private static final long serialVersionUID = -7496279298134415323L;
-	private JTextPane hoja = new JTextPane();
+	private static JTextPane hoja = new JTextPane();
 	private JTextField hojaSur = new JTextField();
 }
