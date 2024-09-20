@@ -2,26 +2,29 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.ScrollPane;
-
-
 import javax.swing.BorderFactory;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class LaminaProcesadorTexto extends JPanel {
 	
 	public LaminaProcesadorTexto() {
-		ScrollPane panel = new ScrollPane();
+//		ScrollPane panel = new ScrollPane();
+		JScrollPane panel = new JScrollPane(hoja);
+		panel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
 		getMenuEmergente();
-		hoja.setBackground(new Color(245, 222, 179));
+		
+		panel.setBackground(new Color(245, 222, 179));
 		hoja.getDocument().addDocumentListener(new modificiadorPrincipal());
 		numeroLetra.setEditable(false);
 		numeroLetra.setBorder(BorderFactory.createEmptyBorder());
@@ -29,7 +32,7 @@ public class LaminaProcesadorTexto extends JPanel {
 		hojaSur.add(numeroLetra, BorderLayout.EAST);
 		setLayout(new BorderLayout(0, 0));
 		add(getLaminaSuperior(), BorderLayout.NORTH);
-		panel.add(hoja);
+		hoja.setBackground(new Color(245, 222, 179));
 		add(panel, BorderLayout.CENTER);
 		add(hojaSur, BorderLayout.SOUTH);
 		hojaSur.setEditable(false);
@@ -40,7 +43,7 @@ public class LaminaProcesadorTexto extends JPanel {
     	MenuEmergente.add(fuentes.getFuente());
  		MenuEmergente.add(fuentes.getEstilo(hojaSur, hoja));
  		MenuEmergente.add(fuentes.getSizeF(hojaSur, hoja));
- 		
+ 		MenuEmergente.add(fuentes.getColorEmergente(hoja));
  		hoja.setComponentPopupMenu(MenuEmergente);
     	 return MenuEmergente;
     }
@@ -53,14 +56,15 @@ public class LaminaProcesadorTexto extends JPanel {
     	MenuDeHerramienta.add(opcionesTeclados.copiar());
     	MenuDeHerramienta.add(opcionesTeclados.cortar());
     	MenuDeHerramienta.add(opcionesTeclados.pegar());
-    	
+    	MenuDeHerramienta.add(opcionesTeclados.letterLeft());
+    	MenuDeHerramienta.add(opcionesTeclados.letterCenter());
+    	MenuDeHerramienta.add(opcionesTeclados.letterRight());
+    	MenuDeHerramienta.add(opcionesTeclados.letterJustify());
     	LaminaSuperior.add(barMenu(), BorderLayout.NORTH);
     	LaminaSuperior.add(MenuDeHerramienta,BorderLayout.CENTER);
     	return LaminaSuperior;
     }
 	private JMenuBar barMenu() {
-		
-		
 		JMenuBar barMenu = new JMenuBar();
 		JMenu archivo = new JMenu("Archivo");
 		JMenu fuente = new JMenu("Menu");
@@ -68,11 +72,11 @@ public class LaminaProcesadorTexto extends JPanel {
 		fuente.add(fuentes.getEstilo(hojaSur, hoja));
 		fuente.add(fuentes.getSizeF(hojaSur, hoja));
 		fuente.add(fuentes.getColor(hoja));
+		fuente.add(fuentes.getColorPantalla(hoja));
 		archivo.add(archivos.getGuardar(hoja));
 		archivo.add(archivos.getGuardarComo(hoja));
 		barMenu.add(archivo);
 		barMenu.add(fuente);
-
 		return barMenu;
 	}
 
