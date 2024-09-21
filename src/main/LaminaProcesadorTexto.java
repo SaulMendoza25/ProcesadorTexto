@@ -2,13 +2,14 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.ScrollPaneConstants;
@@ -16,61 +17,73 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class LaminaProcesadorTexto extends JPanel {
-	
+
 	public LaminaProcesadorTexto() {
-//		ScrollPane panel = new ScrollPane();
+		setLayout(new BorderLayout());
+		add(getLaminaSuperior(), BorderLayout.NORTH);
+		add(getLaminaCentral(), BorderLayout.CENTER);
+		add(getLaminaInferior(), BorderLayout.SOUTH);
+		getMenuEmergente();
+
+		numeroLetra.setBorder(BorderFactory.createEmptyBorder());
+
+	}
+
+	private JPopupMenu getMenuEmergente() {
+		JPopupMenu MenuEmergente = new JPopupMenu();
+
+		MenuEmergente.add(fuentes.getFuente());
+		MenuEmergente.add(fuentes.getEstilo());
+		MenuEmergente.add(fuentes.getSizeF());
+		MenuEmergente.add(fuentes.getColorEmergente(hoja));
+		hoja.setComponentPopupMenu(MenuEmergente);
+		return MenuEmergente;
+	}
+
+	private JPanel getLaminaSuperior() {
+		JPanel LaminaSuperior = new JPanel();
+		
+		LaminaSuperior.setLayout(new BorderLayout());
+		OpcionesTeclado opcionesTeclados = new OpcionesTeclado(hoja);
+		JToolBar MenuDeHerramienta = new JToolBar();
+		MenuDeHerramienta.add(opcionesTeclados.copiar());
+		MenuDeHerramienta.add(opcionesTeclados.cortar());
+		MenuDeHerramienta.add(opcionesTeclados.pegar());
+		MenuDeHerramienta.add(opcionesTeclados.letterLeft());
+		MenuDeHerramienta.add(opcionesTeclados.letterCenter());
+		MenuDeHerramienta.add(opcionesTeclados.letterRight());
+		MenuDeHerramienta.add(opcionesTeclados.letterJustify());
+		LaminaSuperior.add(barMenu(), BorderLayout.NORTH);
+		LaminaSuperior.add(MenuDeHerramienta, BorderLayout.CENTER);
+		return LaminaSuperior;
+	}
+
+	private JPanel getLaminaCentral() {
+		JPanel laminaCentral = new JPanel();
+		laminaCentral.setLayout(new BorderLayout());
+		hoja.setBackground(new Color(245, 222, 179));
+		hoja.getDocument().addDocumentListener(new modificiadorPrincipal());
 		JScrollPane panel = new JScrollPane(hoja);
 		panel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
-		getMenuEmergente();
-		
-		panel.setBackground(new Color(245, 222, 179));
-		hoja.getDocument().addDocumentListener(new modificiadorPrincipal());
-		numeroLetra.setEditable(false);
-		numeroLetra.setBorder(BorderFactory.createEmptyBorder());
-		hojaSur.setLayout(new BorderLayout());
-		hojaSur.add(numeroLetra, BorderLayout.EAST);
-		setLayout(new BorderLayout(0, 0));
-		add(getLaminaSuperior(), BorderLayout.NORTH);
-		hoja.setBackground(new Color(245, 222, 179));
-		add(panel, BorderLayout.CENTER);
-		add(hojaSur, BorderLayout.SOUTH);
-		hojaSur.setEditable(false);
+		laminaCentral.add(panel);
+		return laminaCentral;
 	}
-    private JPopupMenu getMenuEmergente() {
-    	 JPopupMenu MenuEmergente = new JPopupMenu() ;
-    	
-    	MenuEmergente.add(fuentes.getFuente());
- 		MenuEmergente.add(fuentes.getEstilo(hojaSur, hoja));
- 		MenuEmergente.add(fuentes.getSizeF(hojaSur, hoja));
- 		MenuEmergente.add(fuentes.getColorEmergente(hoja));
- 		hoja.setComponentPopupMenu(MenuEmergente);
-    	 return MenuEmergente;
-    }
-    
-    private JPanel getLaminaSuperior() {
-    	JPanel LaminaSuperior = new JPanel();
-    	LaminaSuperior.setLayout(new BorderLayout());
-    	OpcionesTeclado opcionesTeclados=new OpcionesTeclado(hoja);
-    	JToolBar MenuDeHerramienta = new JToolBar();
-    	MenuDeHerramienta.add(opcionesTeclados.copiar());
-    	MenuDeHerramienta.add(opcionesTeclados.cortar());
-    	MenuDeHerramienta.add(opcionesTeclados.pegar());
-    	MenuDeHerramienta.add(opcionesTeclados.letterLeft());
-    	MenuDeHerramienta.add(opcionesTeclados.letterCenter());
-    	MenuDeHerramienta.add(opcionesTeclados.letterRight());
-    	MenuDeHerramienta.add(opcionesTeclados.letterJustify());
-    	LaminaSuperior.add(barMenu(), BorderLayout.NORTH);
-    	LaminaSuperior.add(MenuDeHerramienta,BorderLayout.CENTER);
-    	return LaminaSuperior;
-    }
+
+	private JPanel getLaminaInferior() {
+		JPanel laminaInferior = new JPanel();
+		laminaInferior.setLayout(new BorderLayout());
+		numeroLetra.setFont(new Font("Serial", Font.PLAIN | Font.ITALIC, 12));
+		laminaInferior.add(numeroLetra, BorderLayout.EAST);
+		return laminaInferior;
+	}
+
 	private JMenuBar barMenu() {
 		JMenuBar barMenu = new JMenuBar();
 		JMenu archivo = new JMenu("Archivo");
 		JMenu fuente = new JMenu("Menu");
 		fuente.add(fuentes.getFuente());
-		fuente.add(fuentes.getEstilo(hojaSur, hoja));
-		fuente.add(fuentes.getSizeF(hojaSur, hoja));
+		fuente.add(fuentes.getEstilo());
+		fuente.add(fuentes.getSizeF());
 		fuente.add(fuentes.getColor(hoja));
 		fuente.add(fuentes.getColorPantalla(hoja));
 		archivo.add(archivos.getGuardar(hoja));
@@ -84,34 +97,33 @@ public class LaminaProcesadorTexto extends JPanel {
 		@Override
 		public void changedUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
-            
+
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent arg0) {
-			String textoSinEspacios = hoja.getText().replace(" ", "");
+			String textoSinEspacios = hoja.getText().replace(" ", "").replace("\n", "").replace("\r", "");
 			for (int i = 1; i <= textoSinEspacios.length(); i++) {
-				numeroLetra.setText("" + (i-happend));
+				numeroLetra.setText("" + i);
 			}
 		}
+
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			if (hoja.getText().length() == 0) {
 				numeroLetra.setText("" + 0);
 			} else {
-				String textoSinEspacios = hoja.getText().replace(" ", "");
+				String textoSinEspacios = hoja.getText().replace(" ", "").replace("\n", "").replace("\r", "");
 				for (int i = 1; i <= textoSinEspacios.length(); i++) {
-					numeroLetra.setText("" + (i-happend) );
+					numeroLetra.setText("" + i);
 				}
 			}
 		}
 	}
-	private static int happend = 0;
 
-	private OpcionFuente fuentes=new OpcionFuente();
-	private JTextField numeroLetra = new JTextField();
+	private OpcionFuente fuentes = new OpcionFuente();
+	private JLabel numeroLetra = new JLabel("0");
 	private OpcionArchivo archivos = new OpcionArchivo();
 	private static final long serialVersionUID = -7496279298134415323L;
 	private static JTextPane hoja = new JTextPane();
-	private JTextField hojaSur = new JTextField();
 }

@@ -18,6 +18,7 @@ public class MarcoProcesadorTexto extends JFrame {
 		int y = getScreenDefault().height;
 
 		setIconImage(logoMarco());
+		
 		setTitle("Bloc de Notas");
 		setBounds(x / 4, y / 4, x / 2, y / 2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,20 +31,8 @@ public class MarcoProcesadorTexto extends JFrame {
 	}
 
 	private Image logoMarco() {
-//		URL url = null;
-		String address=null;
-//		try {
-//			url = new URI(
-//					"https://static.wikia.nocookie.net/eswarhammer40k/images/c/c4/Esquema_Primera_Legi%C3%B3n_%C3%81ngeles_Oscuros.png/revision/latest?cb=20150224152846")
-//					.toURL();
-			address = "src/images/cuaderno.png";
-//		} catch (MalformedURLException e) {
-//
-//			e.printStackTrace();
-//		} catch (URISyntaxException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		String	address = "src/images/cuaderno.png";
+
 		return new ImageIcon(address).getImage();
 
 	}

@@ -3,6 +3,7 @@ package main;
 
 
 import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
@@ -60,21 +60,26 @@ public class OpcionFuente {
 		return fuente;
 	}
 
-	public JMenu getEstilo(JTextField hojaSur, JTextPane hoja) {
+	public JMenu getEstilo() {
 
 		JMenu estilo = new JMenu("Estilo");
 		estilo.setIcon(imagenIcon("src/images/estilo.png"));
 		JCheckBoxMenuItem ngt = new JCheckBoxMenuItem("Negrita", new ImageIcon("src/images/bold.png"));
 		KeyStroke controlNegrita = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK);
 		KeyStroke controlCursiva = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK);
+		KeyStroke controlSubrayado = KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_DOWN_MASK);
 		JCheckBoxMenuItem crv = new JCheckBoxMenuItem("Cursiva", new ImageIcon("src/images/italic.png"));
-
+        JCheckBoxMenuItem und =new JCheckBoxMenuItem("Subrayado",new ImageIcon("src/images/subrayado.png"));
+        
 		ngt.addActionListener(new StyledEditorKit.BoldAction());
+		crv.addActionListener(new StyledEditorKit.ItalicAction());
+		und.addActionListener(new StyledEditorKit.UnderlineAction());
 		ngt.setAccelerator(controlNegrita);
 		crv.setAccelerator(controlCursiva);
-		crv.addActionListener(new StyledEditorKit.ItalicAction());
+		und.setAccelerator(controlSubrayado);
 		estilo.add(ngt);
 		estilo.add(crv);
+		estilo.add(und);
 		return estilo;
 	}
 	public JMenu getColor(JTextPane hoja) {
@@ -91,7 +96,7 @@ public class OpcionFuente {
 			JRed.setPaintLabels(true);
 			JRed.setMajorTickSpacing(50);
 			JRed.setMinorTickSpacing(25);
-			JRed.addChangeListener(new cambioJSlider(JRed.getName(),hoja));
+			JRed.addChangeListener(new cambioJSliderLetraColor(JRed.getName(),hoja));
 			color.add(JLRed);
 			color.add(JRed);
 			color.addSeparator();
@@ -103,7 +108,7 @@ public class OpcionFuente {
 			JGreen.setPaintLabels(true);
 			JGreen.setMajorTickSpacing(50);
 			JGreen.setMinorTickSpacing(25);
-			JGreen.addChangeListener(new cambioJSlider(JGreen.getName(),hoja));
+			JGreen.addChangeListener(new cambioJSliderLetraColor(JGreen.getName(),hoja));
 			color.add(JLGreen);
 			color.add(JGreen);
 			color.addSeparator();
@@ -115,7 +120,7 @@ public class OpcionFuente {
 			JBlue.setPaintLabels(true);
 			JBlue.setMajorTickSpacing(50);
 			JBlue.setMinorTickSpacing(25);
-			JBlue.addChangeListener(new cambioJSlider(JBlue.getName(),hoja));
+			JBlue.addChangeListener(new cambioJSliderLetraColor(JBlue.getName(),hoja));
 			color.add(JLBlue);
 			color.add(JBlue);
 			color.addSeparator();
@@ -124,9 +129,7 @@ public class OpcionFuente {
 			
 			color.add(BetterCallSaul);
 			JPanel colores_Primarios_Extendidos = new JPanel();
-			String[] cadenaColores= {"buttonRed.png","buttonBlue.png","buttonYellow.png","buttonBrown.png",
-					"buttonOrange.png","buttonCyan.png","buttonBlack.png","buttonWhite.png","buttonGreen.png"};
-			String[] nombresColoresPrimarioExtendidos= {"Rojo","Azul","Amarillo","Cafe","Naranja","Celeste","Negro","Blanco","Verde"};
+			
 			for(int i=0;i<cadenaColores.length;i++) {
 				JLabel generarColor = new JLabel();
 				generarColor.setText(nombresColoresPrimarioExtendidos[i]);
@@ -143,9 +146,7 @@ public class OpcionFuente {
 		JMenu color = new JMenu("Color");
 		color.setIcon(new ImageIcon("src/images/paleta_de_color.png"));
 		JPanel colores_Primarios_Extendidos = new JPanel();
-		String[] cadenaColores= {"buttonRed.png","buttonBlue.png","buttonYellow.png","buttonBrown.png",
-				"buttonOrange.png","buttonCyan.png","buttonBlack.png","buttonWhite.png","buttonGreen.png"};
-		String[] nombresColoresPrimarioExtendidos= {"Rojo","Azul","Amarillo","Cafe","Naranja","Celeste","Negro","Blanco","Verde"};
+	
 		for(int i=0;i<cadenaColores.length;i++) {
 			JLabel generarColor = new JLabel();
 			generarColor.setText(nombresColoresPrimarioExtendidos[i]);
@@ -237,14 +238,14 @@ public class OpcionFuente {
 			
 		}
 	}
-	private class cambioJSlider implements ChangeListener{
+	private class cambioJSliderLetraColor implements ChangeListener{
 		private static int rojo=0;
 		private static int verde=0;
 		private static int azul=0;
 		private final String nombre;
 		
 		private final JTextPane hoja;
-		public cambioJSlider(String nombre ,JTextPane hoja) {
+		public cambioJSliderLetraColor(String nombre ,JTextPane hoja) {
 			this.nombre=nombre;
 			this.hoja=hoja;
 		}
@@ -306,7 +307,7 @@ public class OpcionFuente {
 		
 	}
 	
-	public  JMenu getSizeF(JTextField hojaSur, JTextPane hoja) {
+	public  JMenu getSizeF() {
 		JMenu size = new JMenu("Tamaño");
 		size.setIcon(imagenIcon("src/images/tamano-del-texto.png"));
 		generadorSize(size, 32);
@@ -319,6 +320,7 @@ public class OpcionFuente {
 		ButtonGroup grupo = new ButtonGroup();
 		for (int i = 4; i <= cantidad / 2; i++) {
 			generado = new JRadioButtonMenuItem(String.valueOf(generador));
+		
 			generado.addActionListener(new StyledEditorKit.FontSizeAction("cambio_size", generador));
 			grupo.add(generado);
 			menuSize.add(generado);
@@ -326,6 +328,9 @@ public class OpcionFuente {
 		}
 
 	}
+	private String[] cadenaColores= {"buttonRed.png","buttonBlue.png","buttonYellow.png","buttonBrown.png",
+			"buttonOrange.png","buttonCyan.png","buttonBlack.png","buttonWhite.png","buttonGreen.png"};
+	private String[] nombresColoresPrimarioExtendidos= {"Rojo","Azul","Amarillo","Cafe","Naranja","Celeste","Negro","Blanco","Verde"};
 	private JSlider JRed;
 	private  JSlider JGreen;
 	private  JSlider JBlue;
